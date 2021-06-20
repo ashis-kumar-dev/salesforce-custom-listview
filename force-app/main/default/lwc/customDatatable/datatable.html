@@ -1,0 +1,12 @@
+<template>
+	<lightning-datatable
+		data={rows}
+		columns={columns}
+		key-field={keyField}
+		show-row-number-column="true"
+		hide-checkbox-column="true"
+		enable-infinite-loading="true"
+		load-more-offset="1"
+		onloadmore={handleLoadMore}
+	></lightning-datatable>
+</template>

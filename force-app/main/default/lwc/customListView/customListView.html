@@ -1,0 +1,164 @@
+<template>
+	<!-- slds-grid initializes the flex container where then we can define the flex properties -->
+	<!-- slds-grid_vertical sets the flex-direction to columns -->
+	<!-- slds-theme_shade gives the grayish background same as the object home page -->
+	<article
+		class="
+			slds-card slds-grid slds-grid_vertical
+			slds-theme_shade
+			c-height-100 c-width-100
+			slds-is-relative
+		"
+	>
+		<div class="slds-card__header slds-grid slds-grid_vertical slds-shrink-none">
+			<header class="slds-media slds-media_center slds-has-flexi-truncate">
+				<div class="slds-media__figure">
+					<lightning-icon
+						icon-name={iconName}
+						alternative-text={objectLabel}
+						title={objectLabel}
+					></lightning-icon>
+				</div>
+				<div class="slds-media__body">
+					<!-- title -->
+					<h2 class="slds-grid slds-grid_vertical">
+						<span class="slds-col slds-grid slds-text-title">
+							<div class="slds-is-relative">
+								<span> {objectLabel} </span>
+								<lightning-button-icon
+									if:false={objectApiNameEditMode}
+									icon-name="utility:edit"
+									variant="bare"
+									size="small"
+									name="edit-object-api-name"
+									onclick={handleObjectApiNameChange}
+								></lightning-button-icon>
+								<div
+									class="slds-form-element slds-is-absolute c-top-0"
+									if:true={objectApiNameEditMode}
+								>
+									<label
+										class="slds-form-element__label slds-assistive-text"
+										for="object-api-name-input-01"
+									>
+										Edit Object Api Name
+									</label>
+									<div class="slds-form-element__control slds-grid">
+										<input
+											type="text"
+											id="object-api-name-input-01"
+											name="object-api-name-input"
+											value={objectApiName}
+											class="slds-input c-reset-width"
+										/>
+										<lightning-button-icon
+											icon-name="utility:check"
+											name="set-object-api-name"
+											onclick={handleObjectApiNameChange}
+										></lightning-button-icon>
+									</div>
+								</div>
+							</div>
+						</span>
+						<span class="slds-col slds-card__header-title"> {listViewName} </span>
+					</h2>
+				</div>
+			</header>
+			<div
+				class="
+					slds-col slds-grid slds-grid_align-spread slds-grid_vertical-align-center
+					slds-var-p-vertical_xx-small
+				"
+			>
+				<div class="slds-col slds-text-title">
+					<span>{totalRows} items</span>
+					<span class="slds-var-p-horizontal_xxx-small">•</span>
+					<span>Sorted by Name</span>
+					<span class="slds-var-p-horizontal_xxx-small">•</span>
+					<span>Filtered by All {objectLabel}</span>
+					<span class="slds-var-p-horizontal_xxx-small">•</span>
+					<span
+						><lightning-relative-date-time value={now}></lightning-relative-date-time
+					></span>
+				</div>
+				<div
+					class="
+						slds-col slds-grid slds-grid_align-space slds-grid_vertical-align-center
+						slds-gutters_direct-xx-small
+					"
+				>
+					<lightning-input
+						type="search"
+						placeholder="Search this list..."
+						name="search-list-input"
+						aria-controls="listview-01"
+						aria-label="Search List"
+						label="Search List"
+						variant="label-hidden"
+						class="slds-col"
+						onblur={handleSearch}
+						onchange={handleSearchKeyChange}
+					></lightning-input>
+					<lightning-button-menu
+						icon-name="utility:settings"
+						class="slds-col"
+						menu-alignment="right"
+						onselect={handleListViewControlsSelection}
+					>
+						<lightning-menu-subheader
+							label="List View Controls"
+							class="slds-text-title_caps"
+						></lightning-menu-subheader>
+						<lightning-menu-item
+							label="New"
+							value="new"
+							title="New"
+						></lightning-menu-item>
+						<lightning-menu-item
+							label="Rename"
+							value="rename"
+							title="Rename"
+						></lightning-menu-item>
+						<lightning-menu-item
+							label="Select Fields to Display"
+							value="select-fields"
+							title="Select Fields to Display"
+						></lightning-menu-item>
+					</lightning-button-menu>
+					<lightning-button-icon-stateful
+						icon-name="utility:filterList"
+						alternative-text="Filters"
+						name="listview-filters"
+						title="Filters"
+						class="slds-col"
+						selected={isFilterOpen}
+						onclick={handleFilterClick}
+					></lightning-button-icon-stateful>
+				</div>
+			</div>
+		</div>
+		<div class="slds-card__body slds-m-vertical_none slds-grow c-min-height-0">
+			<!-- body -->
+			<c-custom-datatable
+				id="listview-01"
+				query={query}
+				max-rows={totalRows}
+				rows={rows}
+				columns={columns}
+				key-field={keyField}
+			></c-custom-datatable>
+		</div>
+		<footer class="slds-card__footer">
+			<template if:true={error}>
+				<span class="slds-text-color_error">{error}</span>
+			</template>
+		</footer>
+		<template if:true={isLoading}>
+			<lightning-spinner
+				variant="brand"
+				alternative-text="loading"
+				title="loading"
+			></lightning-spinner>
+		</template>
+	</article>
+</template>
