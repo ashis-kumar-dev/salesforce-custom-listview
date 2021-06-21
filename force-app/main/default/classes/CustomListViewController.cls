@@ -38,6 +38,7 @@ public inherited sharing class CustomListViewController {
 		info.fieldApiName = fieldDescribe.getName();
 		info.fieldLabel = fieldDescribe.getLabel();
 		info.fieldType = String.valueOf(fieldDescribe.getType());
+		info.isNameField = fieldDescribe.getName() == 'Name';
 		info.isUpdatable = fieldDescribe.isUpdateable();
 		info.isSortable = fieldDescribe.isSortable();
 		return info;
@@ -244,6 +245,8 @@ public inherited sharing class CustomListViewController {
 		public Boolean isUpdatable;
 		@AuraEnabled
 		public Boolean isSortable;
+		@AuraEnabled
+		public Boolean isNameField;
 	}
 
 	// public class ListViewColumn {
