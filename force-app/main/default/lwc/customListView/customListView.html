@@ -34,7 +34,7 @@
 									onclick={handleObjectApiNameChange}
 								></lightning-button-icon>
 								<div
-									class="slds-form-element slds-is-absolute c-top-0"
+									class="slds-form-element slds-is-absolute c-top-0 slds-hide"
 									if:true={objectApiNameEditMode}
 								>
 									<label
@@ -62,6 +62,16 @@
 						</span>
 						<span class="slds-col slds-card__header-title"> {listViewName} </span>
 					</h2>
+				</div>
+				<div class="slds-no-flex slds-hide">
+					<lightning-button-icon
+						if:false={objectApiNameEditMode}
+						icon-name="utility:edit"
+						variant="bare"
+						size="small"
+						name="edit-object-api-name"
+						onclick={handleObjectApiNameChange}
+					></lightning-button-icon>
 				</div>
 			</header>
 			<div
@@ -161,4 +171,10 @@
 			></lightning-spinner>
 		</template>
 	</article>
+	<c-modal>
+		<c-custom-listview-object-selector
+			onsave={handleSave}
+			oncancel={handleCancel}
+		></c-custom-listview-object-selector>
+	</c-modal>
 </template>
