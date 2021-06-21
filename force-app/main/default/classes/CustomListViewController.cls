@@ -38,7 +38,10 @@ public inherited sharing class CustomListViewController {
 		info.fieldApiName = fieldDescribe.getName();
 		info.fieldLabel = fieldDescribe.getLabel();
 		info.fieldType = String.valueOf(fieldDescribe.getType());
-		info.isNameField = fieldDescribe.getName() == 'Name';
+		info.isNameField =
+			fieldDescribe.getName() == 'Name' ||
+			fieldDescribe.getName() == 'DeveloperName' ||
+			fieldDescribe.isNameField();
 		info.isUpdatable = fieldDescribe.isUpdateable();
 		info.isSortable = fieldDescribe.isSortable();
 		return info;
@@ -83,6 +86,7 @@ public inherited sharing class CustomListViewController {
 			for (Schema.SObjectType eachSObjectType : Schema.getGlobalDescribe().values()) {
 				allSObjectNames.add(generateSObjectNameInfo(eachSObjectType.getDescribe()));
 			}
+			allSObjectNames.sort();
 			return allSObjectNames;
 		} catch (Exception e) {
 			throw new AuraHandledException(e.getMessage());
@@ -103,6 +107,7 @@ public inherited sharing class CustomListViewController {
 				for (Schema.SObjectField field : sobjectInfo.fields.getMap().values()) {
 					fieldInfos.add(generateSObjectFieldInfo(field.getDescribe()));
 				}
+				fieldInfos.sort();
 				return fieldInfos;
 			}
 			return null;
@@ -223,18 +228,22 @@ public inherited sharing class CustomListViewController {
 	/**
 	 * This class is searialised to share the sobject name properties
 	 */
-	public class SObjectNameInfo {
+	public class SObjectNameInfo implements System.Comparable {
 		@AuraEnabled
 		public String label;
 		@AuraEnabled
 		public String apiName;
 		@AuraEnabled
 		public String labelPlural;
+		public Integer compareTo(Object compareTo) {
+			SObjectNameInfo other = (SObjectNameInfo) compareTo;
+			return this.label == other.label ? 0 : this.label > other.label ? 1 : -1;
+		}
 	}
 	/**
 	 * This class is searialised to share the field properties
 	 */
-	public class SObjectFieldInfo {
+	public class SObjectFieldInfo implements System.Comparable {
 		@AuraEnabled
 		public String fieldLabel;
 		@AuraEnabled
@@ -247,6 +256,12 @@ public inherited sharing class CustomListViewController {
 		public Boolean isSortable;
 		@AuraEnabled
 		public Boolean isNameField;
+		public Integer compareTo(Object compareTo) {
+			SObjectFieldInfo other = (SObjectFieldInfo) compareTo;
+			return this.fieldLabel == other.fieldLabel
+				? 0
+				: this.fieldLabel > other.fieldLabel ? 1 : -1;
+		}
 	}
 
 	// public class ListViewColumn {
