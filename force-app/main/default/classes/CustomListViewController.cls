@@ -172,7 +172,8 @@ public inherited sharing class CustomListViewController {
 	 * @param query
 	 * @return  `List<SObject>`
 	 * @exception
-	 */
+	 */	
+	@AuraEnabled(cacheable=true)
 	public static List<SObject> getSObjectRows(String query) {
 		try {
 			if (query == null || String.isBlank(query)) {
