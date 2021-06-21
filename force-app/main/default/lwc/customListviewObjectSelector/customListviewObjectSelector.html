@@ -1,3 +1,76 @@
 <template>
-    
+	<lightning-layout
+		class="slds-card"
+		multiple-rows="true"
+		horizontal-align="center"
+		vertical-align="start"
+		title="Select Object and Fields for Listview"
+		pull-to-boundary="small"
+	>
+		<lightning-layout-item size="12" title="Select SObject" padding="horizontal-small">
+			<lightning-combobox
+				label="SObject"
+				name="object-selection-input"
+				message-when-value-missing="Please select an object"
+				options={sobjectOptions}
+				placeholder="Select an Object"
+				tabindex="0"
+				title="SObject"
+				onfocus={handleSobjectSelectionFocused}
+				onchange={handleSobjectSelected}
+			></lightning-combobox>
+		</lightning-layout-item>
+		<lightning-layout-item
+			size="12"
+			title="Select Fields to Display"
+			padding="horizontal-small"
+			class="slds-var-m-vertical_small"
+		>
+			<lightning-dual-listbox
+				add-button-label="Add"
+				down-button-label="Move Down"
+				label="Select fields to display"
+				min="1"
+				name="display-fields-input"
+				options={fieldOptions}
+				onchange={handleFieldSelection}
+				remove-button-label="Remove"
+				required-options={requiredFieldOptions}
+				selected-label="Selected Fields"
+				size="5"
+				source-label="Available Fields"
+				up-button-label="Move Up"
+			></lightning-dual-listbox>
+		</lightning-layout-item>
+		<lightning-layout-item
+			size="12"
+			title="Actions"
+			padding="horizontal-small"
+			class="slds-grid slds-grid_align-end"
+		>
+			<lightning-button
+				class="slds-col"
+				aria-atomic="false"
+				aria-label="cancel"
+				aria-live="off"
+				label="Cancel"
+				name="cancel-button"
+				onclick={handleCancel}
+				title="Cancel"
+				type="reset"
+			></lightning-button>
+			<lightning-button
+				class="slds-col slds-var-m-left_small"
+				aria-atomic="false"
+				aria-label="save"
+				aria-live="off"
+				label="Save"
+				name="save-button"
+				onclick={handleSave}
+				title="Save"
+				type="button"
+				variant="brand"
+			></lightning-button>
+		</lightning-layout-item>
+	</lightning-layout>
 </template>
