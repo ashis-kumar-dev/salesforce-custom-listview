@@ -1,0 +1,42 @@
+<template>
+	<template if:true={showModal}>
+		<section
+			role="dialog"
+			tabindex="-1"
+			aria-labelledby="modal-heading-01"
+			aria-modal="true"
+			aria-describedby="modal-content-id-1"
+			class={modalClass}
+		>
+			<div class="slds-modal__container">
+				<header class={headerClass}>
+					<lightning-button-icon
+						variant="bare-inverse"
+						icon-name="utility:close"
+						title="Close"
+						size="large"
+						class="slds-modal__close"
+						onclick={handleClose}
+					></lightning-button-icon>
+					<template if:true={showHeader}>
+						<h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">
+							{title}
+						</h2>
+						<p class="slds-var-m-top_x-small">
+							<slot name="tagline"></slot>
+						</p>
+					</template>
+				</header>
+				<div class="slds-modal__content slds-var-p-around_medium" id="modal-content-id-1">
+					<slot> </slot>
+				</div>
+				<template if:true={showFooter}>
+					<footer class={footerClass}>
+						<slot name="footer"></slot>
+					</footer>
+				</template>
+			</div>
+		</section>
+		<div class="slds-backdrop slds-backdrop_open"></div>
+	</template>
+</template>
