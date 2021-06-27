@@ -1,13 +1,17 @@
 <template>
 	<lightning-layout
-		class="slds-card"
+		class="slds-card slds-card_boundary"
 		multiple-rows="true"
 		horizontal-align="center"
 		vertical-align="start"
 		title="Select Object and Fields for Listview"
-		pull-to-boundary="small"
 	>
-		<lightning-layout-item size="12" title="Select SObject" padding="horizontal-small">
+		<lightning-layout-item
+			size="12"
+			title="Select SObject"
+			padding="around-small"
+			class="slds-p-bottom_none"
+		>
 			<lightning-combobox
 				label="SObject"
 				name="object-selection-input"
@@ -20,12 +24,7 @@
 				onchange={handleSobjectSelected}
 			></lightning-combobox>
 		</lightning-layout-item>
-		<lightning-layout-item
-			size="12"
-			title="Select Fields to Display"
-			padding="horizontal-small"
-			class="slds-var-m-vertical_small"
-		>
+		<lightning-layout-item size="12" title="Select Fields to Display" padding="around-small">
 			<lightning-dual-listbox
 				add-button-label="Add"
 				down-button-label="Move Down"
@@ -45,8 +44,8 @@
 		<lightning-layout-item
 			size="12"
 			title="Actions"
-			padding="horizontal-small"
-			class="slds-grid slds-grid_align-end"
+			padding="around-small"
+			class="slds-p-top_none slds-grid slds-grid_align-end"
 		>
 			<lightning-button
 				class="slds-col"
@@ -60,7 +59,7 @@
 				type="reset"
 			></lightning-button>
 			<lightning-button
-				class="slds-col slds-var-m-left_small"
+				class="slds-col slds-var-m-left_x-small"
 				aria-atomic="false"
 				aria-label="save"
 				aria-live="off"
