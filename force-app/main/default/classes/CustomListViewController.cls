@@ -66,8 +66,7 @@ public inherited sharing class CustomListViewController {
 	 * @return  `string`
 	 * @exception
 	 */
-	@AuraEnabled(cacheable=true)
-	public static string getObjectLabelPlural(String objectApiName) {
+	private static string getObjectLabelPlural(String objectApiName) {
 		try {
 			return describeSObject(objectApiName)?.getLabelPlural();
 		} catch (Exception e) {
@@ -84,7 +83,10 @@ public inherited sharing class CustomListViewController {
 		try {
 			List<SObjectNameInfo> allSObjectNames = new List<SObjectNameInfo>();
 			for (Schema.SObjectType eachSObjectType : Schema.getGlobalDescribe().values()) {
-				allSObjectNames.add(generateSObjectNameInfo(eachSObjectType.getDescribe()));
+				Schema.DescribeSObjectResult objectInfo = eachSObjectType.getDescribe();
+				if (objectInfo.isQueryable() && objectInfo.isAccessible()) {
+					allSObjectNames.add(generateSObjectNameInfo(objectInfo));
+				}
 			}
 			allSObjectNames.sort();
 			return allSObjectNames;
@@ -121,8 +123,7 @@ public inherited sharing class CustomListViewController {
 	 * @return  `ListViewInfo`
 	 * @exception
 	 */
-	@AuraEnabled(cacheable=true)
-	public static ListViewInfo getListViewInfoByName(String objectApiName) {
+	private static ListViewInfo getListViewInfoByName(String objectApiName) {
 		try {
 			ListViewInfo info = new ListViewInfo();
 			info.objectLabelPlural = getObjectLabelPlural(objectApiName);
@@ -147,7 +148,7 @@ public inherited sharing class CustomListViewController {
 	 * @return  `List<SObject>`
 	 * @exception
 	 */
-	public static List<SObject> getSObjectRows(
+	private static List<SObject> getSObjectRows(
 		String objectApiName,
 		List<String> fields,
 		List<String> filters
@@ -172,7 +173,7 @@ public inherited sharing class CustomListViewController {
 	 * @param query
 	 * @return  `List<SObject>`
 	 * @exception
-	 */	
+	 */
 	@AuraEnabled(cacheable=true)
 	public static List<SObject> getSObjectRows(String query) {
 		try {
@@ -265,18 +266,10 @@ public inherited sharing class CustomListViewController {
 		}
 	}
 
-	// public class ListViewColumn {
-	// 	@AuraEnabled
-	// 	public String label;
-	// 	@AuraEnabled
-	// 	public String fieldName;
-	// 	@AuraEnabled
-	// 	public String type = 'text';
-	// 	@AuraEnabled
-	// 	public String typeAttributes;
-	// 	@AuraEnabled
-	// 	public String cellAttributes;
-	// 	@AuraEnabled
-	// 	public Boolean editable = false;
-	// }
+	public class SObjectRows {
+		@AuraEnabled
+		public Boolean hasMore = false;
+		@AuraEnabled
+		public List<SObject> records = new List<SObject>();
+	}
 }
