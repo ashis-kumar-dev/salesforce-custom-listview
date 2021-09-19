@@ -19,7 +19,7 @@ Custom list view using the power of apex and lightning web components.
 -   [x] Support for setup objects
 -   [x] Infinte loading
 -   [x] Search through the result
+-   [x] Select fields to be displayed on the go
 -   [ ] Sorting
--   [ ] Select fields to be displayed on the go
 -   [ ] Add filters
 -   [ ] Shareable listview link (anyone in the org can see the list view you configured)

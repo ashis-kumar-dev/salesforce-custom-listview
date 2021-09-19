@@ -11,6 +11,7 @@
 			title="Select SObject"
 			padding="around-small"
 			class="slds-p-bottom_none"
+			if:true={sobjectOptions.length}
 		>
 			<lightning-combobox
 				label="SObject"
@@ -20,8 +21,9 @@
 				placeholder="Select an Object"
 				tabindex="0"
 				title="SObject"
-				onfocus={handleSobjectSelectionFocused}
+				spinner-active={loadingSObjects}
 				onchange={handleSobjectSelected}
+				value={objectApiName}
 			></lightning-combobox>
 		</lightning-layout-item>
 		<lightning-layout-item size="12" title="Select Fields to Display" padding="around-small">
@@ -35,10 +37,12 @@
 				onchange={handleFieldSelection}
 				remove-button-label="Remove"
 				required-options={requiredFieldOptions}
+				value={fields}
 				selected-label="Selected Fields"
 				size="5"
 				source-label="Available Fields"
 				up-button-label="Move Up"
+				show-activity-indicator={loadingFields}
 			></lightning-dual-listbox>
 		</lightning-layout-item>
 		<lightning-layout-item
@@ -59,7 +63,7 @@
 				type="reset"
 			></lightning-button>
 			<lightning-button
-				class="slds-col slds-var-m-left_x-small"
+				class="slds-col slds-var-m-left_xx-small"
 				aria-atomic="false"
 				aria-label="save"
 				aria-live="off"

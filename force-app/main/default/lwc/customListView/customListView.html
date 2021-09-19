@@ -25,6 +25,7 @@
 						<span class="slds-col slds-grid slds-text-title">
 							<div class="slds-is-relative">
 								<span> {objectLabel} </span>
+								<!-- sldsValidatorIgnore -->
 								<lightning-button-icon
 									if:false={objectApiNameEditMode}
 									icon-name="utility:edit"
@@ -33,37 +34,13 @@
 									name="edit-object-api-name"
 									onclick={handleObjectApiNameChange}
 								></lightning-button-icon>
-								<div
-									class="slds-form-element slds-is-absolute c-top-0 slds-hide"
-									if:true={objectApiNameEditMode}
-								>
-									<label
-										class="slds-form-element__label slds-assistive-text"
-										for="object-api-name-input-01"
-									>
-										Edit Object Api Name
-									</label>
-									<div class="slds-form-element__control slds-grid">
-										<input
-											type="text"
-											id="object-api-name-input-01"
-											name="object-api-name-input"
-											value={objectApiName}
-											class="slds-input c-reset-width"
-										/>
-										<lightning-button-icon
-											icon-name="utility:check"
-											name="set-object-api-name"
-											onclick={handleObjectApiNameChange}
-										></lightning-button-icon>
-									</div>
-								</div>
 							</div>
 						</span>
 						<span class="slds-col slds-card__header-title"> {listViewName} </span>
 					</h2>
 				</div>
 				<div class="slds-no-flex slds-hide">
+					<!-- sldsValidatorIgnoreNextLine -->
 					<lightning-button-icon
 						if:false={objectApiNameEditMode}
 						icon-name="utility:edit"
@@ -81,15 +58,18 @@
 				"
 			>
 				<div class="slds-col slds-text-title">
-					<span>{totalRows} items</span>
-					<span class="slds-var-p-horizontal_xxx-small">•</span>
+					<span>{rows.length}<span if:true={hasMoreRows}>+</span> items</span>
+					<span class="slds-var-p-horizontal_xx-small">&bull;</span>
 					<span>Sorted by Name</span>
-					<span class="slds-var-p-horizontal_xxx-small">•</span>
+					<span class="slds-var-p-horizontal_xx-small">&bull;</span>
 					<span>Filtered by All {objectLabel}</span>
-					<span class="slds-var-p-horizontal_xxx-small">•</span>
-					<span
-						><lightning-relative-date-time value={now}></lightning-relative-date-time
-					></span>
+					<span class="slds-var-p-horizontal_xx-small">&bull;</span>
+					<span>
+						<lightning-relative-date-time
+							value={now}
+							if:true={now}
+						></lightning-relative-date-time>
+					</span>
 				</div>
 				<div
 					class="
@@ -106,7 +86,6 @@
 						label="Search List"
 						variant="label-hidden"
 						class="slds-col"
-						onblur={handleSearch}
 						onchange={handleSearchKeyChange}
 					></lightning-input>
 					<lightning-button-menu
@@ -151,16 +130,24 @@
 			<!-- body -->
 			<c-custom-datatable
 				id="listview-01"
-				query={query}
-				max-rows={totalRows}
 				rows={rows}
 				columns={columns}
 				key-field={keyField}
+				if:false={isLoading}
 			></c-custom-datatable>
 		</div>
-		<footer class="slds-card__footer">
-			<template if:true={error}>
-				<span class="slds-text-color_error">{error}</span>
+		<footer class="slds-card__footer slds-m-top_none" style="border-top-width: 0px">
+			<template if:true={rows.length}>
+				<lightning-button
+					name="load-more"
+					label="Load More"
+					aria-controls="listview-01"
+					aria-label="Load More"
+					title="Load More"
+					variant="base"
+					onclick={handleQueryMore}
+					if:true={hasMoreRows}
+				></lightning-button>
 			</template>
 		</footer>
 		<template if:true={isLoading}>
@@ -171,10 +158,14 @@
 			></lightning-spinner>
 		</template>
 	</article>
-	<c-modal>
-		<c-custom-listview-object-selector
-			onsave={handleSave}
-			oncancel={handleCancel}
-		></c-custom-listview-object-selector>
-	</c-modal>
+	<template if:true={showObjectSelector}>
+		<c-modal class="object-selector-modal" onclose={handleCancel}>
+			<c-custom-listview-object-selector
+				object-api-name={objectApiName}
+				fields={fieldsToQuery}
+				onsave={handleSave}
+				oncancel={handleCancel}
+			></c-custom-listview-object-selector>
+		</c-modal>
+	</template>
 </template>

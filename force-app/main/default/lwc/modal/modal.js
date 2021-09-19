@@ -1,19 +1,10 @@
 import { api, LightningElement } from 'lwc';
 
 export default class Modal extends LightningElement {
-	showModal = false;
 	@api showFooter = false;
 	@api title;
 	@api variant = 'base';
 	@api size = 'normal';
-
-	@api show() {
-		this.showModal = true;
-	}
-
-	@api hide() {
-		this.showModal = false;
-	}
 
 	get modalClass() {
 		const modalClasses = ['slds-modal', 'slds-fade-in-open'];
@@ -51,6 +42,5 @@ export default class Modal extends LightningElement {
 
 	handleClose() {
 		this.dispatchEvent(new CustomEvent('close'));
-		this.hide();
 	}
 }
