@@ -1,0 +1,29 @@
+name: CI Deploy on Push
+on:
+  push:
+    branches:
+      - "main"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout source code"
+        uses: actions/checkout@v2
+      # Store secret for org
+      - name: "Populate auth file with ORG_SFDX_URL secret"
+        shell: bash
+        run: |
+          echo ${{ secrets.KUMARASHIS_AUTH_URL}} > ./KUMARASHIS_AUTH_URL.txt
+          secretFileSize=$(wc -c "./KUMARASHIS_AUTH_URL.txt" | awk '{print $1}')
+          if [ $secretFileSize == 1 ]; then
+              echo "Missing KUMARASHIS_AUTH_URL secret. Is this workflow running on a fork?";
+              exit 1;
+          fi
+      # Authenticate org
+      - name: "Authenticate Org"
+        run: sfdx auth:sfdxurl:store -f ./KUMARASHIS_AUTH_URL.txt -a devorg -d
+      - name: "Convert source to metadata"
+        run: sfdx force:source:convert -x manifest/package.xml -d metadataout
+      - name: "Validate metadata deployment"
+        run: sfdx force:mdapi:deploy -d metadataout -l RunLocalTests -c -w -1
