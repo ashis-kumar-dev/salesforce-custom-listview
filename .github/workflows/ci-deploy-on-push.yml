@@ -22,7 +22,7 @@ jobs:
       - name: "Populate auth file with ORG_SFDX_URL secret"
         shell: bash
         run: |
-          echo ${{ secrets. }} > ./KUMARASHIS_AUTH_URL.txt
+          echo ${{ secrets.KUMARASHIS_AUTH_URL }} > ./KUMARASHIS_AUTH_URL.txt
           secretFileSize=$(wc -c "./KUMARASHIS_AUTH_URL.txt" | awk '{print $1}')
           if [ $secretFileSize == 1 ]; then
               echo "Missing KUMARASHIS_AUTH_URL secret. Is this workflow running on a fork?";
