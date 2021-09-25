@@ -34,4 +34,4 @@ jobs:
       - name: "Convert source to metadata"
         run: sfdx force:source:convert -x manifest/package.xml -d metadataout
       - name: "Validate metadata deployment"
-        run: sfdx force:mdapi:deploy -d metadataout -l RunLocalTests -c -w -1
+        run: sfdx force:mdapi:deploy -u devorg -d metadataout -l RunLocalTests -c -w -1
